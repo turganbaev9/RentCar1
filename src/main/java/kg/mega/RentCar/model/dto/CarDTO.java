@@ -1,5 +1,4 @@
 package kg.mega.RentCar.model.dto;
-
 import kg.mega.RentCar.model.enums.Category;
 import kg.mega.RentCar.model.enums.Color;
 import kg.mega.RentCar.model.enums.EngineType;
