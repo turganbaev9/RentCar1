@@ -10,5 +10,5 @@ public class PriceDTO {
     private LocalDate startDate;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate endDate;
-    private CarDetailsDTO car;
+    private CarDTO car;
 }

@@ -22,6 +22,8 @@ Long id;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate reservedDates ;
     @OneToOne
-    Car car;
+   private Car car;
+    @OneToOne
+    private  Order order;
 
 }

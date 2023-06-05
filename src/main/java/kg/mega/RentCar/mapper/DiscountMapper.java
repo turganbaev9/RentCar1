@@ -6,16 +6,17 @@ import kg.mega.RentCar.model.dto.DiscountDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Collection;
 import java.util.List;
 
 @Mapper
 public interface DiscountMapper {
 
-    AddressMapper INSTANCE= Mappers.getMapper(AddressMapper.class);
+    DiscountMapper INSTANCE= Mappers.getMapper(DiscountMapper.class);
     Discount toEntity(DiscountDTO discountDTO);
     DiscountDTO toDto(Discount discount);
     List<Discount> toEntityList(List<DiscountDTO>discountDTOList);
-    List<DiscountDTO>toDTOList(List<Discount >discounts);
 
+    List<DiscountDTO> toDtoList(List<Discount>discountList);
 
 }

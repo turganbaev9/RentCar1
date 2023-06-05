@@ -1,5 +1,6 @@
 package kg.mega.RentCar.service.Impl;
 
+
 import kg.mega.RentCar.mapper.CarMapper;
 import kg.mega.RentCar.mapper.OrderMapper;
 import kg.mega.RentCar.model.Car;
@@ -10,8 +11,13 @@ import kg.mega.RentCar.repository.OrderRepo;
 import kg.mega.RentCar.service.CarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 @Service
@@ -22,10 +28,27 @@ public class CarServiceImpl implements CarService {
 
     private  final OrderRepo orderRep;
     @Override
-    public CarDTO save(CarDTO carDTO) {
+    public CarDTO save(CarDTO carDTO, MultipartFile file) {
         Car car = CarMapper.INSTANCE.toEntity(carDTO);
-        Car save = carRep.save(car);
-        return CarMapper.INSTANCE.toDto(save);
+        car.setPhoto(!fileDownload(file).equals("") ? fileDownload(file) : "file not saved");
+        Car savedCar = carRep.save(car);
+        return CarMapper.INSTANCE.toDto(savedCar);
+    }
+
+    private String fileDownload(MultipartFile file){
+        try {
+            File path=new File("D:\\image\\carsImages\\"+file.getOriginalFilename());
+            path.createNewFile();
+            FileOutputStream output=new FileOutputStream(path);
+            output.write(file.getBytes());
+            output.close();
+
+
+            return path.getAbsolutePath();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "";
+        }
     }
 
     @Override

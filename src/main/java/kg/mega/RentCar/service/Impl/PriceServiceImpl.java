@@ -1,9 +1,9 @@
 package kg.mega.RentCar.service.Impl;
 
 import kg.mega.RentCar.mapper.PriceMapper;
+import kg.mega.RentCar.model.Car;
 import kg.mega.RentCar.model.Price;
 import kg.mega.RentCar.model.dto.PriceDTO;
-import kg.mega.RentCar.repository.CarDetailsRepo;
 import kg.mega.RentCar.repository.CarRepo;
 import kg.mega.RentCar.repository.PriceRepo;
 import kg.mega.RentCar.service.PriceService;
@@ -16,23 +16,27 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class PriceServiceImpl implements PriceService {
-    private final CarDetailsRepo carRepo;
+    private final CarRepo carRepo;
     private final PriceRepo priceRepo;
     @Override
     public PriceDTO save(PriceDTO priceDTO) {
         Price price= PriceMapper.INSTANCE.toEntity(priceDTO);
-      carRepo.findById(price.getCar().getId()).get();
+      Car car=carRepo.findById(price.getCar().getId()).orElse(null);
+      price.setCar(car);
+      price=priceRepo.save(price);
       return PriceMapper.INSTANCE.toDto(price);
     }
-
     @Override
     public PriceDTO update(PriceDTO priceDTO) {
         Price price = PriceMapper.INSTANCE.toEntity(priceDTO);
         Price priceUpdate = priceRepo.findById(price.getId()).get();
-        priceUpdate.setPrice(priceUpdate.getPrice());
-        priceUpdate.setStartDate(priceUpdate.getStartDate());
-        priceUpdate.setEndDate(priceUpdate.getEndDate());
-        return priceDTO;
+          priceUpdate.setPrice(price.getPrice());
+/*          priceUpdate.setStartDate(priceUpdate.getStartDate());
+          priceUpdate.setEndDate(priceUpdate.getEndDate());*/
+
+
+
+        return PriceMapper.INSTANCE.toDto(priceUpdate);
     }
 
     @Override
@@ -42,7 +46,9 @@ public class PriceServiceImpl implements PriceService {
 
     @Override
     public List<PriceDTO> findAll() {
-        return PriceMapper.INSTANCE.toDTOList(priceRepo.findAll());
+        List<Price>prices=priceRepo.findAll();
+
+        return PriceMapper.INSTANCE.toDTOList(prices);
 
     }
 

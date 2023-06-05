@@ -4,6 +4,8 @@ public enum Category {
 
 
     ECONOM,
+    SEDAN,
     MINIVAN,
     PREMIUM
+
 }

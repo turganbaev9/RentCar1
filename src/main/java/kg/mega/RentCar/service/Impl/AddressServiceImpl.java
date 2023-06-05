@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
@@ -16,8 +18,9 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressDTO saveAddress(AddressDTO addressDTO) {
         Address address=AddressMapper.INSTANCE.toEntity(addressDTO);
-        Address save= addressRepo.save(address);
-        return AddressMapper.INSTANCE.toDto(save);
+
+addressRepo.save(address);
+        return AddressMapper.INSTANCE.toDto(address);
     }
 
     @Override
@@ -32,9 +35,11 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public AddressDTO findById(Long id) {
-        Address found=addressRepo.findById(id).get();
+        Optional<Address> addressOptional = addressRepo.findById(id);
+        Address found = addressOptional.orElse(null);
         return AddressMapper.INSTANCE.toDto(found);
     }
+
 
     @Override
     public List<AddressDTO> findAllAddress() {
